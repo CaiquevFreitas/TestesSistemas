@@ -24,7 +24,7 @@ const Login: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Invalid email or password');
+      toast.error('Email ou senha inválida');
     } finally {
       setIsLoading(false);
     }
@@ -38,17 +38,17 @@ const Login: React.FC = () => {
             <ClipboardList className="h-12 w-12 text-blue-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to TestFlow
+            Entre em TestSystem
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Test Case Management System
+            Sistema de Testes
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
-                Email address
+               Email
               </label>
               <input
                 id="email-address"
@@ -59,12 +59,12 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                placeholder="Email"
               />
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                Senha
               </label>
               <input
                 id="password"
@@ -75,7 +75,8 @@ const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
+                placeholder="Senha"
+                maxLength={10}
               />
             </div>
           </div>
@@ -88,7 +89,7 @@ const Login: React.FC = () => {
                 isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
               } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200`}
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
           </div>
 
