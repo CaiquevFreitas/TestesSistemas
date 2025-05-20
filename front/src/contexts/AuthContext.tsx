@@ -38,39 +38,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    // In a real app, this would be an API call
-    if (email === 'admin@example.com' && password === 'password') {
-      const mockUser = {
-        id: '1',
-        name: 'Admin User',
-        email: 'admin@example.com',
-        role: 'admin' as const
-      };
-      setUser(mockUser);
-      localStorage.setItem('tcmsUser', JSON.stringify(mockUser));
-      return;
-    } else if (email === 'tester@example.com' && password === 'password') {
-      const mockUser = {
-        id: '2',
-        name: 'Tester User',
-        email: 'tester@example.com',
-        role: 'tester' as const
-      };
-      setUser(mockUser);
-      localStorage.setItem('tcmsUser', JSON.stringify(mockUser));
-      return;
-    } else if (email === 'programmer@example.com' && password === 'password') {
-      const mockUser = {
-        id: '3',
-        name: 'Programmer User',
-        email: 'programmer@example.com',
-        role: 'programmer' as const
-      };
-      setUser(mockUser);
-      localStorage.setItem('tcmsUser', JSON.stringify(mockUser));
-      return;
+    const response = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+  
+    if (!response.ok) {
+      throw new Error('Invalid email or password');
     }
-    throw new Error('Invalid email or password');
+  
+    const user = await response.json();
+    setUser(user);
+    localStorage.setItem('tcmsUser', JSON.stringify(user));
   };
 
   const logout = () => {
