@@ -30,6 +30,10 @@ User.init({
         type: Sequelize.DATE,
         allowNull: false,
         field: 'created_at'
+    },
+    senha: {
+        type: Sequelize.CHAR(10),
+        allowNull: false
     }
 }, {
     sequelize,

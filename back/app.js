@@ -33,20 +33,18 @@ TestPlan.belongsTo(User, { foreignKey: 'createdBy' });
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
+    
     try {
         const user = await User.findOne({ where: { email } });
-
+        console.log(user.senha)
         if (!user) {
             return res.status(401).json({ message: 'Usuário não encontrado' });
         }
 
-        // Autenticação simples: compara senha em texto puro
         if (user.senha !== password) {
             return res.status(401).json({ message: 'Senha incorreta' });
         }
 
-        // Retorna apenas os campos necessários
         const { id, nome, email: userEmail, cargo } = user;
 
         return res.json({
