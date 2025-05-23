@@ -49,6 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   
     const user = await response.json();
+
+    console.log(user)
     setUser(user);
     localStorage.setItem('tcmsUser', JSON.stringify(user));
   };

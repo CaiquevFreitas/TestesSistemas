@@ -13,6 +13,7 @@ CREATE TABLE users (
 );
 
 insert into users values (2, 'caio', 'caioJunior@gmail.com', 'admin', default, '2025-05-19 14:32:45', '1234567890');
+insert into users values (3, 'luiz', 'luizJunior@gmail.com', 'tester', default, '2025-05-19 14:32:45', '1234567890');
 alter table users add column senha char(10);
 select * from users;
 

@@ -36,7 +36,7 @@ app.post('/login', async (req, res) => {
     
     try {
         const user = await User.findOne({ where: { email } });
-        console.log(user.senha)
+
         if (!user) {
             return res.status(401).json({ message: 'Usuário não encontrado' });
         }
@@ -45,13 +45,13 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Senha incorreta' });
         }
 
-        const { id, nome, email: userEmail, cargo } = user;
-
+   
+        console.log(user)
         return res.json({
-            id,
-            name: nome,
-            email: userEmail,
-            role: cargo
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
         });
 
     } catch (err) {
