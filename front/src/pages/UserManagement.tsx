@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import UserModal from '../components/modals/UserModal';
@@ -19,40 +19,30 @@ const UserManagement: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
   // Mock data
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: '1',
-      name: 'Admin User',
-      email: 'admin@example.com',
-      role: 'admin',
-      active: true,
-      createdAt: '2025-01-15T10:30:00Z'
-    },
-    {
-      id: '2',
-      name: 'Luana Martins',
-      email: 'MartinsLua@gmail.com',
-      role: 'tester',
-      active: true,
-      createdAt: '2025-02-20T14:45:00Z'
-    },
-    {
-      id: '3',
-      name: 'Beto Silva',
-      email: 'Beto159@gmail.com',
-      role: 'programmer',
-      active: true,
-      createdAt: '2025-02-28T09:15:00Z'
-    },
-    {
-      id: '4',
-      name: 'Carlos Mendes',
-      email: 'carlos.mendes@example.com',
-      role: 'tester',
-      active: true,
-      createdAt: '2025-03-10T11:00:00Z'
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/mockUsers', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro: ${response.status}`);
+      }
+
+      const users = await response.json();
+      setUsers(users); 
+    } catch (error) {
+      console.error('Erro ao buscar usuários:', error);
     }
-  ]);
+  };
+  fetchUsers();
+}, []);
+
+
 
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

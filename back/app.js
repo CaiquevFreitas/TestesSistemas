@@ -31,6 +31,7 @@ TestCase.belongsTo(User, { foreignKey: 'createdBy' });
 User.hasMany(TestPlan, { foreignKey: 'createdBy' });
 TestPlan.belongsTo(User, { foreignKey: 'createdBy' });
 
+//Rota de Login de Usuários
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     
@@ -45,7 +46,6 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Senha incorreta' });
         }
 
-   
         return res.json({
             id: user.id,
             name: user.name,
@@ -59,6 +59,16 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//Rota para mostrar usuários
+app.get('/mockUsers', async (req,res)=>{
+    try {
+    const users = await User.findAll();
+    res.status(200).json(users); 
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    res.status(500).json({ message: 'Usuários não encontrados' });
+  }
+})
 
 
 app.listen(port, ()=>{
