@@ -46,7 +46,6 @@ app.post('/login', async (req, res) => {
         }
 
    
-        console.log(user)
         return res.json({
             id: user.id,
             name: user.name,
