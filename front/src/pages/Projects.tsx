@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash, Eye } from 'lucide-react';
 import ProjectModal from '../components/modals/ProjectModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,32 +19,25 @@ const Projects: React.FC = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   // Mock data
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: '1',
-      name: 'Gerenciamento de Teste',
-      description: 'Sistema destinado à realização de testes automatizados.',
-      version: '1.0.0',
-      createdAt: '2025-03-10T14:30:00Z',
-      testCount: 42
-    },
-    {
-      id: '2',
-      name: 'Sistema de Pagamentos',
-      description: 'API de processamento de pagamentos com múltiplos gateways.',
-      version: '2.1.5',
-      createdAt: '2025-02-18T09:15:00Z',
-      testCount: 78
-    },
-    {
-      id: '3',
-      name: 'Portal de Atendimento',
-      description: 'Portal para atendentes gerenciarem tickets de suporte.',
-      version: '3.0.1',
-      createdAt: '2025-01-05T11:22:00Z',
-      testCount: 63
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects');
+      if (!response.ok) throw new Error('Erro ao carregar projetos');
+
+      const data = await response.json();
+      setProjects(data);
+    } catch (error) {
+      console.error('Erro ao buscar projetos:', error);
+      alert('Falha ao carregar os projetos. Tente novamente mais tarde.');
     }
-  ]);
+  };
+
+  fetchProjects();
+}, []);
+
 
   const filteredProjects = projects.filter(project => 
     project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,21 +49,36 @@ const Projects: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveProject = (project: Project) => {
-    if (project.id) {
-      // Update existing project
-      setProjects(projects.map(p => p.id === project.id ? project : p));
+  const handleSaveProject = async (project: Project) => {
+    try {
+      if (project.id) {
+        await fetch(`http://localhost:3000/editProject/${project.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(project)
+      });
+        setProjects(projects.map(p => p.id === project.id ? project : p));
     } else {
-      // Add new project
       const newProject = {
         ...project,
         id: Math.random().toString(36).substr(2, 9),
         createdAt: new Date().toISOString(),
         testCount: 0
       };
+
+      await fetch(`http://localhost:3000/createProject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProject)
+      });
+
       setProjects([...projects, newProject]);
     }
     setIsModalOpen(false);
+    } catch (error) {
+      
+    }
+    
   };
 
   const handleDeleteProject = (id: string) => {

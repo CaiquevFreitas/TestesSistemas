@@ -3,7 +3,7 @@ const User = require('../models/Users');
 const router = express.Router();
 
 router.post('/createUser', async(req,res)=>{
-    const {name, email, role, active, password, createdAt} = req.body;
+    const {id, name, email, role, active, password, createdAt} = req.body;
 
     try {
         const verificEmail = await User.findOne({ where: { email } });
@@ -12,6 +12,7 @@ router.post('/createUser', async(req,res)=>{
             return res.json({ message: 'Email já cadastrado' });
         }
         const newUser = {
+            id,
             name,
             email,
             role,
