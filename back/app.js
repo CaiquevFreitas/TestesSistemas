@@ -24,6 +24,7 @@ const createUser = require('./routes/createUser');
 const editUser = require('./routes/editUser');
 const deleteUser = require('./routes/deleteUser');
 const createProject = require('./routes/createProject');
+const editProject = require('./routes/editProject');
 
 // Relacionamentos
 Project.hasMany(TestCase, { foreignKey: 'projectId' });
@@ -55,6 +56,9 @@ app.use('/', deleteUser);
 
 //Rota para criar projetos
 app.use('/', createProject);
+
+//Rota para editar projetos
+app.use('/', editProject);
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)
