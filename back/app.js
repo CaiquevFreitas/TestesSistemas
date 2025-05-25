@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const Usuario = require('./models/Users');
 const port = 3000;
 
 const app = express();
@@ -18,6 +17,13 @@ const Project = require('./models/Projects');
 const TestCase = require('./models/TestCase');
 const TestPlan = require('./models/TestPlan');
 
+//Importação das rotas
+const loginUsuario = require('./routes/loginUsuario');
+const mockUsers = require('./routes/mockUsers');
+const createUser = require('./routes/createUser');
+const editUser = require('./routes/editUser');
+const deleteUser = require('./routes/deleteUser');
+
 // Relacionamentos
 Project.hasMany(TestCase, { foreignKey: 'projectId' });
 TestCase.belongsTo(Project, { foreignKey: 'projectId' });
@@ -32,112 +38,19 @@ User.hasMany(TestPlan, { foreignKey: 'createdBy' });
 TestPlan.belongsTo(User, { foreignKey: 'createdBy' });
 
 //Rota de Login de Usuários
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    
-    try {
-        const user = await User.findOne({ where: { email } });
-
-        if (!user) {
-            return res.status(401).json({ message: 'Usuário não encontrado' });
-        }
-
-        if (user.senha !== password) {
-            return res.status(401).json({ message: 'Senha incorreta' });
-        }
-
-        return res.json({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role
-        });
-
-    } catch (err) {
-        console.error('Erro ao tentar login:', err);
-        return res.status(500).json({ message: 'Erro interno no servidor' });
-    }
-});
+app.use('/', loginUsuario);
 
 //Rota para mostrar usuários
-app.get('/mockUsers', async (req,res)=>{
-    try {
-    const users = await User.findAll();
-    res.status(200).json(users); 
-  } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
-    res.status(500).json({ message: 'Usuários não encontrados' });
-  }
-})
+app.use('/', mockUsers);
 
 //Rota para cadastrar usuário
-app.post('/createUser', async(req,res)=>{
-    const {name, email, role, active, password, createdAt} = req.body;
-
-    try {
-        const verificEmail = await User.findOne({ where: { email } });
-
-        if(verificEmail){
-            return res.json({ message: 'Email já cadastrado' });
-        }
-        const newUser = {
-            name,
-            email,
-            role,
-            senha: password,
-            createdAt
-        }
-        await  User.create(newUser);
-        res.status(200).json({message: 'Usuário criado'})
-    } catch (error) {
-        res.status(503).json({message: error.message})
-    }
-})
+app.use('/', createUser);
 
 //Rota para editar usuário
-app.put('/editUser/:id', async(req,res)=>{
-    const {name, email, role, active, password} = req.body
-    const id = req.params
-
-    try {
-        if(password == ''){
-            await  User.update({
-            name,
-            email,
-            role,
-            active},
-            { where: {id: id} }
-        )
-        }else{
-            await  User.update({
-            name,
-            email,
-            role,
-            active,
-            senha: password},
-            { where: {id: id} }
-        )
-        }
-        res.status(200).json({message: 'Usuário atualizado com sucesso'})
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
-    
-})
+app.use('/', editUser)
 
 //Rota para Deletar usuário
-app.delete('/deleteUser/:email', async(req,res)=>{
-    const email = req.params.email
-
-    try {
-       await User.destroy({
-            where: {email: email}
-       }) 
-       res.status(200).json({message: 'Usuário excluido com sucesso'})
-    } catch (error) {
-        res.status(503).json({message: error.message})
-    }
-})
+app.use('/', deleteUser)
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)
