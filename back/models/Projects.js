@@ -4,9 +4,9 @@ class Project extends Sequelize.Model {}
 
 Project.init({
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: Sequelize.STRING(9),
+    allowNull: false,
+    primaryKey: true
   },
   name: {
     type: Sequelize.STRING(150),

@@ -4,9 +4,8 @@ class TestPlan extends Sequelize.Model {}
 
 TestPlan.init({
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: Sequelize.STRING(9),
+    primaryKey: true
   },
   title: {
     type: Sequelize.STRING(200),

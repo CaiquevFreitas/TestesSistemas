@@ -4,9 +4,8 @@ class TestCase extends Sequelize.Model {}
 
 TestCase.init({
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: Sequelize.STRING(9),
+    primaryKey: true
   },
   title: {
     type: Sequelize.STRING(200),
