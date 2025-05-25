@@ -70,6 +70,30 @@ app.get('/mockUsers', async (req,res)=>{
   }
 })
 
+//Rota para cadastrar usuário
+app.post('/createUser', async(req,res)=>{
+    const {name, email, role, active, password, createdAt} = req.body;
+    console.log(name, email, role, password, createdAt)
+
+    try {
+        const verificEmail = await User.findOne({ where: { email } });
+
+        if(verificEmail){
+            return res.json({ message: 'Email já cadastrado' });
+        }
+        const newUser = {
+            name,
+            email,
+            role,
+            senha: password,
+            createdAt
+        }
+        await  User.create(newUser);
+        res.status(200).json({message: 'Usuário criado'})
+    } catch (error) {
+        res.status(503).json({erro: error.message})
+    }
+})
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)

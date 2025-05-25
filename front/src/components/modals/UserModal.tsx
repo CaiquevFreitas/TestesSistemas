@@ -38,7 +38,7 @@ const UserModal: React.FC<UserModalProps> = ({
     if (user) {
       setFormData({
         ...user,
-        password: '' // Don't populate password field when editing
+        password: '' 
       });
     } else {
       setFormData({
@@ -139,6 +139,7 @@ const UserModal: React.FC<UserModalProps> = ({
                   onChange={handleChange}
                   required={!user} // Only required for new users
                   placeholder={user ? '••••••••' : 'Enter password'}
+                  maxLength={10}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>

@@ -56,22 +56,35 @@ const UserManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveUser = (user: User) => {
+  const handleSaveUser = async (user: User) => {
+  try {
     if (user.id) {
-      // Update existing user
+      await fetch(`http://localhost:3000/mockUsers/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
       setUsers(users.map(u => u.id === user.id ? user : u));
     } else {
-      // Add new user
       const newUser = {
         ...user,
         id: Math.random().toString(36).substr(2, 9),
         createdAt: new Date().toISOString(),
         active: true
       };
+      await fetch(`http://localhost:3000/createUser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
       setUsers([...users, newUser]);
     }
     setIsModalOpen(false);
-  };
+  } catch (error) {
+    console.error('Erro ao salvar usuário:', error);
+  }
+};
+
 
   const handleDeleteUser = (id: string) => {
     if (!isAdmin) return;

@@ -1,10 +1,10 @@
-CREATE DATABASE TesteSistema;
+create DATABASE TesteSistema;
 USE TesteSistema ;
 
 
 -- Usuários
 CREATE TABLE users (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY auto_increment,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     role ENUM('admin', 'tester', 'programmer') NOT NULL,
@@ -13,8 +13,9 @@ CREATE TABLE users (
     created_at DATETIME NOT NULL
 );
 
-insert into users values (2, 'caio', 'caioJunior@gmail.com', 'admin', default, '2025-05-19 14:32:45', '1234567890');
-insert into users values (3, 'luiz', 'luizJunior@gmail.com', 'tester', default, '2025-05-19 14:32:45', '1234567890');
+insert into users values (default, 'caique', 'caiqueJunior@gmail.com', 'programmer', default,'1234567890' ,  '2025-05-19 14:32:45');
+insert into users values (default, 'caio', 'caioJunior@gmail.com', 'admin', default,'1234567890' ,  '2025-05-19 14:32:45');
+insert into users values (default, 'luiz', 'luizJunior@gmail.com', 'tester', default, '1234567890',  '2025-05-19 14:32:45');
 
 select * from users;
 
