@@ -77,6 +77,7 @@ const UserManagement: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newUser)
       });
+      
       setUsers([...users, newUser]);
     }
     setIsModalOpen(false);
@@ -86,10 +87,35 @@ const UserManagement: React.FC = () => {
 };
 
 
-  const handleDeleteUser = (id: string) => {
-    if (!isAdmin) return;
-    setUsers(users.filter(user => user.id !== id));
-  };
+ const handleDeleteUser = async (user: User) => {
+  if (!isAdmin) return;
+
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir este usuário?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/deleteUser/${user.email}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erro ao excluir o usuário');
+    }
+
+  
+    setUsers(users.filter(u => u.email === user.email? user : u));
+    alert('Usuário excluído com sucesso!');
+    window.location.reload();
+  } catch (error) {
+    console.error('Erro ao excluir usuário:', error);
+    alert('Falha ao excluir o usuário. Tente novamente.');
+  }
+};
+
 
   const handleToggleActive = (id: string) => {
     if (!isAdmin) return;
@@ -222,7 +248,7 @@ const UserManagement: React.FC = () => {
                           <Edit size={18} />
                         </button>
                         <button
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user)}
                           className="text-red-600 hover:text-red-900"
                         >
                           <Trash size={18} />

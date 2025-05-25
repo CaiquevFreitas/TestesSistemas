@@ -73,7 +73,6 @@ app.get('/mockUsers', async (req,res)=>{
 //Rota para cadastrar usuário
 app.post('/createUser', async(req,res)=>{
     const {name, email, role, active, password, createdAt} = req.body;
-    console.log(name, email, role, password, createdAt)
 
     try {
         const verificEmail = await User.findOne({ where: { email } });
@@ -124,6 +123,20 @@ app.put('/editUser/:id', async(req,res)=>{
         res.status(500).json({message: error.message})
     }
     
+})
+
+//Rota para Deletar usuário
+app.delete('/deleteUser/:email', async(req,res)=>{
+    const email = req.params.email
+
+    try {
+       await User.destroy({
+            where: {email: email}
+       }) 
+       res.status(200).json({message: 'Usuário excluido com sucesso'})
+    } catch (error) {
+        res.status(503).json({message: error.message})
+    }
 })
 
 app.listen(port, ()=>{
