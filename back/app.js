@@ -26,6 +26,7 @@ const deleteUser = require('./routes/deleteUser');
 const createProject = require('./routes/createProject');
 const editProject = require('./routes/editProject');
 const deleteProject = require('./routes/deleteProject');
+const mockProjects = require('./routes/mockProjects');
 
 // Relacionamentos
 Project.hasMany(TestCase, { foreignKey: 'projectId' });
@@ -56,7 +57,7 @@ app.use('/', editUser);
 app.use('/', deleteUser);
 
 //Rota para Mostrar projetos
-
+app.use('/', mockProjects);
 
 //Rota para Cadastrar projetos
 app.use('/', createProject);

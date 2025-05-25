@@ -6,7 +6,7 @@ router.post('/createProject', async(req,res)=>{
     const {id, name, description, version, createdAt} = req.body;
     
     try {
-        const verificProject = await Project.findOne({where: {name}})
+        const verificProject = await Project.findOne({ where: { name } })
         if(verificProject){
             return res.json({ message: 'Projeto já cadastrado' });
         }
@@ -17,8 +17,8 @@ router.post('/createProject', async(req,res)=>{
             version,
             createdAt
         }
-
-        await Project.create(newProject);
+        console.log(newProject)
+        await  Project.create(newProject);
         res.status(200).json({message: 'Projeto criado'})
     } catch (error) {
         res.status(503).json({message: error.message})

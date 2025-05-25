@@ -21,7 +21,8 @@ Project.init({
   },
   testCount: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    field: 'test_count'
   },
   createdAt: {
     type: Sequelize.DATE,

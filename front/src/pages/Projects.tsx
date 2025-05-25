@@ -24,17 +24,21 @@ const Projects: React.FC = () => {
   useEffect(() => {
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects');
-      if (!response.ok) throw new Error('Erro ao carregar projetos');
+      const response = await fetch('http://localhost:3000/mockProjects', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-      const data = await response.json();
-      setProjects(data);
+      if (!response.ok) {
+        throw new Error(`Erro: ${response.status}`);
+      }
+
+      const projects = await response.json();
+      setProjects(projects); 
     } catch (error) {
       console.error('Erro ao buscar projetos:', error);
-      alert('Falha ao carregar os projetos. Tente novamente mais tarde.');
     }
   };
-
   fetchProjects();
 }, []);
 
@@ -76,13 +80,35 @@ const Projects: React.FC = () => {
     }
     setIsModalOpen(false);
     } catch (error) {
-      
+      console.error('Erro ao salvar Projeto:', error);
     }
     
   };
 
-  const handleDeleteProject = (id: string) => {
+  const handleDeleteProject = async(id: string) => {
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir este projeto?");
+    if (!confirmDelete) return;
+
+    try {
+    const response = await fetch(`http://localhost:3000/deleteProject/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erro ao excluir o projeto');
+    }
+
     setProjects(projects.filter(project => project.id !== id));
+    alert('Projeto excluído com sucesso!');
+    window.location.reload();
+  } catch (error) {
+    console.error('Erro ao excluir Projeto:', error);
+    alert('Falha ao excluir o Projeto. Tente novamente.');
+  }
   };
 
   const formatDate = (dateString: string) => {
