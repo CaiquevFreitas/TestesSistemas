@@ -59,7 +59,7 @@ const UserManagement: React.FC = () => {
   const handleSaveUser = async (user: User) => {
   try {
     if (user.id) {
-      await fetch(`http://localhost:3000/mockUsers/${user.id}`, {
+      await fetch(`http://localhost:3000/editUser/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
