@@ -15,7 +15,8 @@ router.post('/createProject', async(req,res)=>{
             name,
             description,
             version,
-            createdAt
+            createdAt,
+            testCount: 0
         }
         console.log(newProject)
         await  Project.create(newProject);
