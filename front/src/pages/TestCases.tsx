@@ -110,9 +110,31 @@ const TestCases: React.FC = () => {
   }
 };
 
-  const handleDeleteTestCase = (id: string) => {
+  const handleDeleteTestCase = async (id: string) => {
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir este caso de teste?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/deleteTestCase/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erro ao excluir o caso de teste');
+    }
+
     setTestCases(testCases.filter(testCase => testCase.id !== id));
-  };
+    alert('Caso de teste excluído com sucesso!');
+  } catch (error) {
+    console.error('Erro ao excluir caso de teste:', error);
+    alert('Falha ao excluir o caso de teste. Tente novamente.');
+  }
+};
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {

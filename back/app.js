@@ -26,6 +26,7 @@ const mockProjects = require('./routes/mockProjects');
 const mockTestCases =  require('./routes/mockTestCases');
 const createTestCase = require('./routes/createTestCase');
 const editTestCase = require('./routes/editTestCase');
+const deleteTestCase = require('./routes/deleteTestcase');
 
 //Rota de Login de Usuários
 app.use('/', loginUsuario);
@@ -62,6 +63,9 @@ app.use('/', createTestCase);
 
 //Rota para Editar casos de teste
 app.use('/', editTestCase)
+
+//Rota para Deletar casos de teste
+app.use('/', deleteTestCase); 
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)
