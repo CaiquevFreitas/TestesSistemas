@@ -28,6 +28,7 @@ const createTestCase = require('./routes/createTestCase');
 const editTestCase = require('./routes/editTestCase');
 const deleteTestCase = require('./routes/deleteTestcase');
 //Importação das rotas TestPlan
+const mockTestPlans = require('./routes/mockTestPlans');
 const createTestPlan = require('./routes/createTestPlan');
 
 //Rota de Login de Usuários
@@ -68,6 +69,9 @@ app.use('/', editTestCase)
 
 //Rota para Deletar casos de teste
 app.use('/', deleteTestCase); 
+
+//Rota para Mostrar Planos de Teste
+app.use('/', mockTestPlans);
 
 //Rota para Criar Planos de Teste
 app.use('/', createTestPlan);

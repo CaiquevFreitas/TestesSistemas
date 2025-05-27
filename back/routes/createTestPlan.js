@@ -6,7 +6,6 @@ const User = require('../models/Users');
 
 router.post('/createTestPlan', async(req,res)=>{
     const {id, title, description, project, startDate, endDate, testCount, progress, createdBy, createdAt} = req.body
-
     try {
         const verificTestPlan =  await TestPlan.findOne({where:{title}})
         if(verificTestPlan){

@@ -27,7 +27,8 @@ TestPlan.init({
   },
   testCount: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    field: 'test_count'
   },
   progress: {
     type: Sequelize.INTEGER,
