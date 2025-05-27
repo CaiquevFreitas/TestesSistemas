@@ -11,37 +11,21 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-//Models
-const User = require('./models/Users');
-const Project = require('./models/Projects');
-const TestCase = require('./models/TestCase');
-const TestPlan = require('./models/TestPlan');
-
-//Importação das rotas
+//Importação das rotas User
 const loginUsuario = require('./routes/loginUsuario');
 const mockUsers = require('./routes/mockUsers');
 const createUser = require('./routes/createUser');
 const editUser = require('./routes/editUser');
 const deleteUser = require('./routes/deleteUser');
+//Importação das rotas Project
 const createProject = require('./routes/createProject');
 const editProject = require('./routes/editProject');
 const deleteProject = require('./routes/deleteProject');
 const mockProjects = require('./routes/mockProjects');
+//Importação das rotas TestCase
 const mockTestCases =  require('./routes/mockTestCases');
 const createTestCase = require('./routes/createTestCase');
-
-// Relacionamentos
-Project.hasMany(TestCase, { foreignKey: 'projectId' });
-TestCase.belongsTo(Project, { foreignKey: 'projectId' });
-
-Project.hasMany(TestPlan, { foreignKey: 'projectId' });
-TestPlan.belongsTo(Project, { foreignKey: 'projectId' });
-
-User.hasMany(TestCase, { foreignKey: 'createdBy' });
-TestCase.belongsTo(User, { foreignKey: 'createdBy' });
-
-User.hasMany(TestPlan, { foreignKey: 'createdBy' });
-TestPlan.belongsTo(User, { foreignKey: 'createdBy' });
+const editTestCase = require('./routes/editTestCase');
 
 //Rota de Login de Usuários
 app.use('/', loginUsuario);
@@ -75,6 +59,9 @@ app.use('/', mockTestCases);
 
 //Rota para Criar casos de teste
 app.use('/', createTestCase);
+
+//Rota para Editar casos de teste
+app.use('/', editTestCase)
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)

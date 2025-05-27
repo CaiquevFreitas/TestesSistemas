@@ -33,7 +33,9 @@ router.post('/createTestCase', async(req,res)=>{
        }
        
        await TestCase.create(newTestCase);
-       createTestCaseStep(id, steps);
+       if(steps){
+        createTestCaseStep(id, steps);
+       }
        res.status(200).json({message: 'Caso de teste criado'}) 
     } catch (error) {
         res.status(503).json({message: error.message})
