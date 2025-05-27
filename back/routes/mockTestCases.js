@@ -46,7 +46,7 @@ router.get('/mockTestCase', async (req, res) => {
       project: tc.Project?.name || null,
       category: tc.category,
       createdBy: tc.User?.name || null,
-      createdAt: tc.created_at.toISOString()
+      createdAt: tc.createdAt ? tc.createdAt.toISOString() : null,
     }));
 
     res.status(200).json(formatted);

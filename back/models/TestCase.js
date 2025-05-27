@@ -15,10 +15,6 @@ TestCase.init({
     type: Sequelize.TEXT,
     allowNull: false
   },
-  steps: {
-    type: Sequelize.JSON,
-    allowNull: false
-  },
   expected: {
     type: Sequelize.TEXT,
     allowNull: false
@@ -30,6 +26,16 @@ TestCase.init({
   category: {
     type: Sequelize.STRING(100),
     allowNull: true
+  },
+  projectId: {
+    type: Sequelize.STRING(9),
+    allowNull: true,
+    field: 'project_id'
+  },
+  createdBy: {
+    type: Sequelize.STRING(9),
+    allowNull: true,
+    field: 'created_by'
   },
   createdAt: {
     type: Sequelize.DATE,

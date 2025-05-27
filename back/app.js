@@ -27,7 +27,8 @@ const createProject = require('./routes/createProject');
 const editProject = require('./routes/editProject');
 const deleteProject = require('./routes/deleteProject');
 const mockProjects = require('./routes/mockProjects');
-const mockTestCases =  require('./routes/mockTestCases')
+const mockTestCases =  require('./routes/mockTestCases');
+const createTestCase = require('./routes/createTestCase');
 
 // Relacionamentos
 Project.hasMany(TestCase, { foreignKey: 'projectId' });
@@ -69,8 +70,11 @@ app.use('/', editProject);
 //Rota para Deletar projetos
 app.use('/', deleteProject);
 
-//Rota para mostrar Casos de teste
+//Rota para Mostrar casos de teste
 app.use('/', mockTestCases);
+
+//Rota para Criar casos de teste
+app.use('/', createTestCase);
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)

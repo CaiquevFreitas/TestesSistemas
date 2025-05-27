@@ -75,23 +75,40 @@ const TestCases: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveTestCase = (testCase: TestCase) => {
+  const handleSaveTestCase = async (testCase: TestCase) => {
+  try {
     if (testCase.id) {
-      // Update existing test case
+      await fetch(`http://localhost:3000/editTestCase/${testCase.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testCase),
+      });
+
       setTestCases(testCases.map(tc => tc.id === testCase.id ? testCase : tc));
     } else {
-      // Add new test case
+      
       const newTestCase = {
         ...testCase,
         id: Math.random().toString(36).substr(2, 9),
         createdAt: new Date().toISOString(),
         createdBy: user?.name || 'Unknown User',
-        status: 'pending' as const
+        status: 'pending' as const,
       };
+
+      await fetch(`http://localhost:3000/createTestCase`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTestCase),
+      });
+
       setTestCases([...testCases, newTestCase]);
     }
+
     setIsModalOpen(false);
-  };
+  } catch (error) {
+    console.error('Erro ao salvar Caso de Teste:', error);
+  }
+};
 
   const handleDeleteTestCase = (id: string) => {
     setTestCases(testCases.filter(testCase => testCase.id !== id));
