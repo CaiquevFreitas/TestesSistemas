@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash, Eye, Calendar } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import TestPlanModal from '../components/modals/TestPlanModal';
@@ -22,41 +22,28 @@ const TestPlans: React.FC = () => {
   const [editingTestPlan, setEditingTestPlan] = useState<TestPlan | null>(null);
 
   // Mock data
-  const [testPlans, setTestPlans] = useState<TestPlan[]>([
-    {
-      id: '1',
-      title: 'Sprint 1 Regression Tests',
-      description: 'Full regression testing for Sprint 1 features',
-      project: 'Gerenciamento de Teste',
-      startDate: '2025-04-01',
-      endDate: '2025-04-10',
-      testCount: 32,
-      progress: 75,
-      createdBy: 'Admin User',
-    },
-    {
-      id: '2',
-      title: 'Payment API Integration Tests',
-      description: 'End-to-end tests for payment processing API',
-      project: 'Sistema de Pagamentos',
-      startDate: '2025-03-15',
-      endDate: '2025-03-25',
-      testCount: 18,
-      progress: 90,
-      createdBy: 'Luana Martins',
-    },
-    {
-      id: '3',
-      title: 'User Portal Acceptance Tests',
-      description: 'User acceptance testing for the customer portal',
-      project: 'Portal de Atendimento',
-      startDate: '2025-04-12',
-      endDate: '2025-04-18',
-      testCount: 24,
-      progress: 30,
-      createdBy: 'Beto Silva',
-    }
-  ]);
+  const [testPlans, setTestPlans] = useState<TestPlan[]>([]);
+
+  useEffect(() => {
+      const fetchTestPlans = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/mockTestPlans', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+    
+          if (!response.ok) {
+            throw new Error(`Erro: ${response.status}`);
+          }
+    
+          const testPlans = await response.json();
+          setTestPlans(testPlans); 
+        } catch (error) {
+          console.error('Erro ao buscar os planos de teste:', error);
+        }
+      };
+      fetchTestPlans();
+    }, []);
 
   const filteredTestPlans = testPlans.filter(testPlan => 
     testPlan.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -68,23 +55,42 @@ const TestPlans: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveTestPlan = (testPlan: TestPlan) => {
+  const handleSaveTestPlan = async (testPlan: TestPlan) => {
+  try {
     if (testPlan.id) {
-      // Update existing test plan
+      await fetch(`http://localhost:3000/editTestPlan/${testPlan.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testPlan),
+      });
+
       setTestPlans(testPlans.map(tp => tp.id === testPlan.id ? testPlan : tp));
     } else {
-      // Add new test plan
       const newTestPlan = {
         ...testPlan,
         id: Math.random().toString(36).substr(2, 9),
         createdBy: user?.name || 'Unknown User',
         testCount: 0,
-        progress: 0
+        progress: 0,
+        createdAt: new Date().toISOString(),
       };
+
+      await fetch(`http://localhost:3000/createTestPlan`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTestPlan),
+      });
+
       setTestPlans([...testPlans, newTestPlan]);
     }
+
     setIsModalOpen(false);
-  };
+  } catch (error) {
+    console.error('Erro ao salvar Plano de Teste:', error);
+    alert('Erro ao salvar Plano de Teste. Tente novamente.');
+  }
+};
+
 
   const handleDeleteTestPlan = (id: string) => {
     setTestPlans(testPlans.filter(testPlan => testPlan.id !== id));

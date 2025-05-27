@@ -32,7 +32,17 @@ TestPlan.init({
   progress: {
     type: Sequelize.INTEGER,
     allowNull: false
-  }
+  },
+  projectId: {
+    type: Sequelize.STRING(9),
+    allowNull: true,
+    field: 'project_id'
+  },
+  createdBy: {
+    type: Sequelize.STRING(9),
+    allowNull: true,
+    field: 'created_by'
+  },
 }, {
   sequelize,
   modelName: 'TestPlan',

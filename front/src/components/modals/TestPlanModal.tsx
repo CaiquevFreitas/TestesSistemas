@@ -39,7 +39,27 @@ const TestPlanModal: React.FC<TestPlanModalProps> = ({
   });
 
   // Mock projects for the dropdown
-  const projectOptions = ['Gerenciamento de Teste', 'Sistema de Pagamentos', 'Portal de Atendimento'];
+  const [projectOptions, setProjectOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetch('http://localhost:3000/mockProjects') 
+        .then((res) => res.json())
+        .then((data) => {
+          const projectNames = data.map((project: { name: string }) => project.name);
+          setProjectOptions(projectNames);
+          
+          setFormData((prev) => ({
+            ...prev,
+            project: projectNames[0] || ''
+          }));
+        })
+        .catch((error) => {
+          console.error('Erro ao buscar projetos:', error);
+        });
+    }
+  }, [isOpen]);
+  
 
   // Reset form when modal opens or testPlan changes
   useEffect(() => {
@@ -65,9 +85,18 @@ const TestPlanModal: React.FC<TestPlanModalProps> = ({
   }, [testPlan, isOpen, projectOptions]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const { name, value } = e.target;
+
+  const parsedValue = ['testCount', 'progress'].includes(name)
+    ? parseInt(value)
+    : value;
+
+  setFormData(prev => ({
+    ...prev,
+    [name]: parsedValue,
+  }));
+};
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
