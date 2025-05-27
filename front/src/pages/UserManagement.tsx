@@ -109,7 +109,6 @@ const UserManagement: React.FC = () => {
   
     setUsers(users.filter(u => u.email === user.email? user : u));
     alert('Usuário excluído com sucesso!');
-    window.location.reload();
   } catch (error) {
     console.error('Erro ao excluir usuário:', error);
     alert('Falha ao excluir o usuário. Tente novamente.');

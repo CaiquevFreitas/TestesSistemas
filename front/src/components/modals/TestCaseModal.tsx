@@ -36,8 +36,28 @@ const TestCaseModal: React.FC<TestCaseModalProps> = ({ isOpen, onClose, onSave, 
   });
 
   // Mock projects and categories for the dropdown
-  const projectOptions = ['Gerenciamento de Teste', 'Sistema de Pagamentos', 'Portal de Atendimento'];
+  const [projectOptions, setProjectOptions] = useState<string[]>([]);
   const categoryOptions = ['Cadastro', 'Validação', 'Autenticação', 'Relatórios', 'Integração'];
+
+useEffect(() => {
+  if (isOpen) {
+    fetch('http://localhost:3000/mockProjects') 
+      .then((res) => res.json())
+      .then((data) => {
+        const projectNames = data.map((project: { name: string }) => project.name);
+        setProjectOptions(projectNames);
+        
+        setFormData((prev) => ({
+          ...prev,
+          project: projectNames[0] || ''
+        }));
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar projetos:', error);
+      });
+  }
+}, [isOpen]);
+
 
   // Reset form when modal opens or testCase changes
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit, Trash, Eye, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import TestCaseModal from '../components/modals/TestCaseModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,77 +24,28 @@ const TestCases: React.FC = () => {
   const [editingTestCase, setEditingTestCase] = useState<TestCase | null>(null);
 
   // Mock data
-  const [testCases, setTestCases] = useState<TestCase[]>([
-    {
-      id: '1',
-      title: 'Cadastro do projeto no sistema',
-      description: 'Verificar se é possível cadastrar um novo projeto no sistema corretamente',
-      steps: [
-        'Acessar a tela de "Cadastro de Sistema"',
-        'Preencher os dados do novo sistema',
-        'Clicar no botão "Cadastrar"',
-        'Verificar a mensagem de confirmação'
-      ],
-      expected: 'O sistema cadastra o novo sistema e exibe uma mensagem de confirmação.',
-      status: 'passed',
-      project: 'Gerenciamento de Teste',
-      category: 'Cadastro',
-      createdBy: 'Admin User',
-      createdAt: '2025-03-10T14:30:00Z',
-    },
-    {
-      id: '2',
-      title: 'Cadastro no Sistema com Dados Inválidos',
-      description: 'Verifica se o sistema impede corretamente o cadastro com dados inválidos',
-      steps: [
-        'Preencher os dados de forma incorreta',
-        'Clicar no botão "Cadastrar"',
-        'Verificar mensagens de erro',
-        'Corrigir os erros e tentar novamente'
-      ],
-      expected: 'O sistema não permite o cadastro até que os erros sejam corrigidos.',
-      status: 'passed',
-      project: 'Gerenciamento de Teste',
-      category: 'Validação',
-      createdBy: 'Luana Martins',
-      createdAt: '2025-03-11T10:15:00Z',
-    },
-    {
-      id: '3',
-      title: 'Autenticação de Usuário',
-      description: 'Verificar se o login funciona corretamente para usuários cadastrados',
-      steps: [
-        'Acessar a tela de login',
-        'Informar credenciais',
-        'Clicar no botão "Entrar"',
-        'Verificar redirecionamento'
-      ],
-      expected: 'O usuário é autenticado no sistema e tem acesso às suas funcionalidades.',
-      status: 'pending',
-      project: 'Gerenciamento de Teste',
-      category: 'Autenticação',
-      createdBy: 'Beto Silva',
-      createdAt: '2025-03-15T09:22:00Z',
-    },
-    {
-      id: '4',
-      title: 'Gerar Relatório no SGPT',
-      description: 'Verificar se a geração de relatórios funciona conforme esperado',
-      steps: [
-        'Acessar o menu de relatórios',
-        'Selecionar tipo de relatório',
-        'Definir período',
-        'Clicar em "Gerar Relatório"',
-        'Verificar conteúdo'
-      ],
-      expected: 'O relatório é gerado com sucesso e exibido para o usuário.',
-      status: 'failed',
-      project: 'Gerenciamento de Teste',
-      category: 'Relatórios',
-      createdBy: 'Admin User',
-      createdAt: '2025-03-18T16:45:00Z',
-    }
-  ]);
+  const [testCases, setTestCases] = useState<TestCase[]>([]);
+
+  useEffect(() => {
+    const fetchTestCases = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/mockTestCase', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Erro: ${response.status}`);
+        }
+  
+        const testCases = await response.json();
+        setTestCases(testCases); 
+      } catch (error) {
+        console.error('Erro ao buscar os casos de teste:', error);
+      }
+    };
+    fetchTestCases();
+  }, []);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -104,7 +104,6 @@ const Projects: React.FC = () => {
 
     setProjects(projects.filter(project => project.id !== id));
     alert('Projeto excluído com sucesso!');
-    window.location.reload();
   } catch (error) {
     console.error('Erro ao excluir Projeto:', error);
     alert('Falha ao excluir o Projeto. Tente novamente.');
