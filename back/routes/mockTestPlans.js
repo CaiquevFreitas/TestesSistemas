@@ -21,20 +21,19 @@ router.get('/mockTestPlans', async (req, res) => {
         }
       ]
     });
-
+    
     const formatted = testPlans.map(plan => ({
-        id: String(plan.id),
-        title: plan.title,
-        description: plan.description,
-        project: plan.Project?.name || '',
-        startDate: plan.start_date?.toISOString().split('T')[0] || '',
-        endDate: plan.end_date?.toISOString().split('T')[0] || '',
-        testCount: plan.test_count ?? 0,
-        progress: plan.progress ?? 0,
-        createdBy: plan.User?.name || ''
+      id: String(plan.id),
+      title: plan.title,
+      description: plan.description,
+      project: plan.Project?.name || '',
+      startDate: plan.startDate || '',
+      endDate: plan.endDate || '',
+      testCount: plan.testCount ?? 0,
+      progress: plan.progress ?? 0,
+      createdBy: plan.User?.name || ''
     }));
 
-    console.log(formatted)
     res.json(formatted);
   } catch (error) {
     console.error('Erro ao buscar Planos de Teste:', error);
