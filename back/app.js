@@ -13,23 +13,24 @@ app.use(express.urlencoded({extended:true}));
 
 //Importação das rotas User
 const loginUsuario = require('./routes/loginUsuario');
-const mockUsers = require('./routes/mockUsers');
-const createUser = require('./routes/createUser');
-const editUser = require('./routes/editUser');
-const deleteUser = require('./routes/deleteUser');
+const mockUsers = require('./routes/read/mockUsers');
+const createUser = require('./routes/create/createUser');
+const editUser = require('./routes/update/editUser');
+const deleteUser = require('./routes/delete/deleteUser');
 //Importação das rotas Project
-const createProject = require('./routes/createProject');
-const editProject = require('./routes/editProject');
-const deleteProject = require('./routes/deleteProject');
-const mockProjects = require('./routes/mockProjects');
+const createProject = require('./routes/create/createProject');
+const editProject = require('./routes/update/editProject');
+const deleteProject = require('./routes/delete/deleteProject');
+const mockProjects = require('./routes/read/mockProjects');
 //Importação das rotas TestCase
-const mockTestCases =  require('./routes/mockTestCases');
-const createTestCase = require('./routes/createTestCase');
-const editTestCase = require('./routes/editTestCase');
-const deleteTestCase = require('./routes/deleteTestcase');
+const mockTestCases =  require('./routes/read/mockTestCases');
+const createTestCase = require('./routes/create/createTestCase');
+const editTestCase = require('./routes/update/editTestCase');
+const deleteTestCase = require('./routes/delete/deleteTestcase');
 //Importação das rotas TestPlan
-const mockTestPlans = require('./routes/mockTestPlans');
-const createTestPlan = require('./routes/createTestPlan');
+const mockTestPlans = require('./routes/read/mockTestPlans');
+const createTestPlan = require('./routes/create/createTestPlan');
+const editTestPlan = require('./routes/update/editTestPlan');
 
 //Rota de Login de Usuários
 app.use('/', loginUsuario);
@@ -75,6 +76,9 @@ app.use('/', mockTestPlans);
 
 //Rota para Criar Planos de Teste
 app.use('/', createTestPlan);
+
+//Rota para Editar Planos de Teste
+app.use('/', editTestPlan);
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)
