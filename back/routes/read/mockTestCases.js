@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const TestCase = require('../models/TestCase');
-const Project = require('../models/Projects');
-const User = require('../models/Users');
-const TestCaseStep = require('../models/TestCaseStep');
+const TestCase = require('../../models/TestCase');
+const Project = require('../../models/Projects');
+const User = require('../../models/Users');
+const TestCaseStep = require('../../models/TestCaseStep');
 
 //Relacionamentos 
 Project.hasMany(TestCase, { foreignKey: 'project_id' });

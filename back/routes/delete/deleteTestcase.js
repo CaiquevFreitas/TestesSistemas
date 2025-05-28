@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const TestCase = require('../models/TestCase');
-const TestCaseStep = require('../models/TestCaseStep');
+const TestCase = require('../../models/TestCase');
+const TestCaseStep = require('../../models/TestCaseStep');
 
 router.delete('/deleteTestCase/:id', async (req, res) => {
   const { id } = req.params;

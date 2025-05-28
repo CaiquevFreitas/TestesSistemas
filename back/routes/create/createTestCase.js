@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const TestCase = require('../models/TestCase');
-const Project = require('../models/Projects');
-const User = require('../models/Users');
-const TestCaseStep = require('../models/TestCaseStep');
+const TestCase = require('../../models/TestCase');
+const Project = require('../../models/Projects');
+const User = require('../../models/Users');
+const TestCaseStep = require('../../models/TestCaseStep');
 
 router.post('/createTestCase', async(req,res)=>{
     const {id, title, description, steps, expected, status, project, category, createdBy, createdAt} = req.body

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const TestCase = require('../models/TestCase');
-const TestCaseStep = require('../models/TestCaseStep');
+const TestCase = require('../../models/TestCase');
+const TestCaseStep = require('../../models/TestCaseStep');
 
 router.put('/editTestCase/:id', async (req, res) => {
     const { title, description, steps, expected, status, category } = req.body;

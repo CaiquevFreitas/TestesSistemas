@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router();
-const TestPlan  =  require('../models/TestPlan');
-const Project = require('../models/Projects');
-const User = require('../models/Users');
+const TestPlan  =  require('../../models/TestPlan');
+const Project = require('../../models/Projects');
+const User = require('../../models/Users');
 
 router.post('/createTestPlan', async(req,res)=>{
     const {id, title, description, project, startDate, endDate, testCount, progress, createdBy, createdAt} = req.body

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const TestPlan = require('../models/TestPlan');
-const Project = require('../models/Projects');
-const User = require('../models/Users');
+const TestPlan = require('../../models/TestPlan');
+const Project = require('../../models/Projects');
+const User = require('../../models/Users');
 
 TestPlan.belongsTo(Project, { foreignKey: 'project_id' });
 TestPlan.belongsTo(User, { foreignKey: 'created_by' });
