@@ -92,9 +92,30 @@ const TestPlans: React.FC = () => {
 };
 
 
-  const handleDeleteTestPlan = (id: string) => {
+  const handleDeleteTestPlan = async (id: string) => {
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir este plano de teste?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/deleteTestPlan/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erro ao excluir o plano de teste');
+    }
+
     setTestPlans(testPlans.filter(testPlan => testPlan.id !== id));
-  };
+    alert('Plano de teste excluído com sucesso!');
+  } catch (error) {
+    console.error('Erro ao excluir plano de teste:', error);
+    alert('Falha ao excluir o plano de teste. Tente novamente.');
+  }
+};
 
   return (
     <div className="space-y-6">
