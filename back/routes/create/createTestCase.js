@@ -16,6 +16,7 @@ router.post('/createTestCase', async(req,res)=>{
         }
         const user = await User.findOne({ where: {name: createdBy} });
         const projects = await Project.findOne({ where: {name: project}});
+        console.log(projects)
         if(!user || !projects){
             console.log('Projeto ou usuário não existem')
             return res.json({ message: 'Projeto ou usuário não existem' });
@@ -33,6 +34,7 @@ router.post('/createTestCase', async(req,res)=>{
        }
        
        await TestCase.create(newTestCase);
+       await Project.update({testCount: projects.testCount + 1},{where: {id: projects.id}})
        if(steps){
         createTestCaseStep(id, steps);
        }
