@@ -39,7 +39,7 @@ const DonutChart = () => {
     pending: stats[2].value,
   };
 
-  const total = data.passed + data.failed + data.pending || 1; // evita divisão por zero
+  const total = data.passed + data.failed + data.pending || 1; 
   const passRate = Math.round((data.passed / total) * 100);
   const failRate = Math.round((data.failed / total) * 100);
   const pendingRate = Math.round((data.pending / total) * 100);

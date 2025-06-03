@@ -28,6 +28,7 @@ const createTestCase = require('./routes/create/createTestCase');
 const editTestCase = require('./routes/update/editTestCase');
 const deleteTestCase = require('./routes/delete/deleteTestcase');
 const countTest  = require('./routes/countTests');
+const countCategory  = require('./routes/countCategory');
 //Importação das rotas TestPlan
 const mockTestPlans = require('./routes/read/mockTestPlans');
 const createTestPlan = require('./routes/create/createTestPlan');
@@ -85,7 +86,11 @@ app.use('/', editTestPlan);
 //Rota para Deletar Planos de Teste
 app.use('/', deleteTestPlan);
 
+//Rota para Mostrar Casos de Teste  no gráfico
 app.use('/', countTest);
+
+//Rota para Mostrar as categorias  no gráfico
+app.use('/', countCategory);
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)
