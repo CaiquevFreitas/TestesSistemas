@@ -1,26 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCircle2, XCircle, Clock } from 'lucide-react';
 
 const DonutChart = () => {
-  // Mock data for test status
+  const [stats, setStats] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/countTest');
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        const dados = await response.json();
+
+        setStats([
+          { value: dados.passedTests || 0 },
+          { value: dados.failedTests || 0 },
+          { value: dados.pendingTests || 0 },
+        ]);
+      } catch (error) {
+        console.error('Erro ao buscar estatísticas:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading || stats.length < 3) {
+    return <div className="text-center text-gray-500">Carregando...</div>;
+  }
+
   const data = {
-    passed: 178,
-    failed: 23,
-    pending: 47
+    passed: stats[0].value,
+    failed: stats[1].value,
+    pending: stats[2].value,
   };
 
-  const total = data.passed + data.failed + data.pending;
+  const total = data.passed + data.failed + data.pending || 1; // evita divisão por zero
   const passRate = Math.round((data.passed / total) * 100);
   const failRate = Math.round((data.failed / total) * 100);
   const pendingRate = Math.round((data.pending / total) * 100);
 
-  // Calculate stroke dasharray values for SVG
-  const circleSize = 280; // This is the circumference of our circle with r=45
+  const circleSize = 280;
   const passedOffset = circleSize * (passRate / 100);
   const failedOffset = circleSize * (failRate / 100);
   const pendingOffset = circleSize * (pendingRate / 100);
 
-  // Starting points for each segment
   let passedStart = 0;
   let failedStart = passedOffset;
   let pendingStart = passedOffset + failedOffset;
@@ -29,80 +57,31 @@ const DonutChart = () => {
     <div className="flex flex-col items-center">
       <div className="relative">
         <svg width="200" height="200" viewBox="0 0 100 100">
-          {/* Background circle */}
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="45" 
-            fill="transparent" 
-            stroke="#e5e7eb" 
-            strokeWidth="10" 
-          />
-          
-          {/* Passed segment */}
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="45" 
-            fill="transparent" 
-            stroke="#22c55e" 
-            strokeWidth="10" 
+          <circle cx="50" cy="50" r="45" fill="transparent" stroke="#e5e7eb" strokeWidth="10" />
+          <circle cx="50" cy="50" r="45" fill="transparent" stroke="#22c55e" strokeWidth="10"
             strokeDasharray={`${passedOffset} ${circleSize - passedOffset}`}
             strokeDashoffset={-passedStart}
             transform="rotate(-90 50 50)"
           />
-          
-          {/* Failed segment */}
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="45" 
-            fill="transparent" 
-            stroke="#ef4444" 
-            strokeWidth="10" 
+          <circle cx="50" cy="50" r="45" fill="transparent" stroke="#ef4444" strokeWidth="10"
             strokeDasharray={`${failedOffset} ${circleSize - failedOffset}`}
             strokeDashoffset={-failedStart}
             transform="rotate(-90 50 50)"
           />
-          
-          {/* Pending segment */}
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="45" 
-            fill="transparent" 
-            stroke="#f59e0b" 
-            strokeWidth="10" 
+          <circle cx="50" cy="50" r="45" fill="transparent" stroke="#f59e0b" strokeWidth="10"
             strokeDasharray={`${pendingOffset} ${circleSize - pendingOffset}`}
             strokeDashoffset={-pendingStart}
             transform="rotate(-90 50 50)"
           />
-          
-          {/* Center text */}
-          <text 
-            x="50" 
-            y="45" 
-            fontFamily="sans-serif" 
-            fontSize="12" 
-            textAnchor="middle" 
-            fill="#4b5563"
-          >
+          <text x="50" y="45" fontFamily="sans-serif" fontSize="12" textAnchor="middle" fill="#4b5563">
             Pass Rate
           </text>
-          <text 
-            x="50" 
-            y="65" 
-            fontFamily="sans-serif" 
-            fontSize="18" 
-            fontWeight="bold" 
-            textAnchor="middle" 
-            fill="#1f2937"
-          >
+          <text x="50" y="65" fontFamily="sans-serif" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#1f2937">
             {passRate}%
           </text>
         </svg>
       </div>
-      
+
       <div className="grid grid-cols-3 gap-4 mt-6 w-full">
         <div className="flex items-center">
           <CheckCircle2 size={16} className="text-green-500 mr-2" />
