@@ -27,6 +27,7 @@ const mockTestCases =  require('./routes/read/mockTestCases');
 const createTestCase = require('./routes/create/createTestCase');
 const editTestCase = require('./routes/update/editTestCase');
 const deleteTestCase = require('./routes/delete/deleteTestcase');
+const countTest  = require('./routes/countTests');
 //Importação das rotas TestPlan
 const mockTestPlans = require('./routes/read/mockTestPlans');
 const createTestPlan = require('./routes/create/createTestPlan');
@@ -83,6 +84,8 @@ app.use('/', editTestPlan);
 
 //Rota para Deletar Planos de Teste
 app.use('/', deleteTestPlan);
+
+app.use('/', countTest);
 
 app.listen(port, ()=>{
     console.log(`Servidor rodando http://localhost:${port}`)

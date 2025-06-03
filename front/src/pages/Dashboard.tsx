@@ -13,17 +13,32 @@ import {
 import StatCard from '../components/StatCard';
 import BarChart from '../components/charts/BarChart';
 import DonutChart from '../components/charts/DonutChart';
+import { useEffect, useState } from 'react';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const [stats, setStats] = useState<any[]>([]);
 
-  // Mock data for dashboard
-  const stats = [
-    { title: 'Total Tests', value: 248, icon: <ClipboardCheck size={24} className="text-blue-500" />, change: '+12%' },
-    { title: 'Failed Tests', value: 23, icon: <AlertCircle size={24} className="text-red-500" />, change: '-8%' },
-    { title: 'Pending Tests', value: 42, icon: <Clock size={24} className="text-amber-500" />, change: '-5%' },
-    { title: 'Pass Rate', value: '90.7%', icon: <Activity size={24} className="text-green-500" />, change: '+2.3%' },
-  ];
+   useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/countTest');
+      const data = await response.json();
+      setStats([
+        { title: 'Total Tests', value: data.totalTests || '0', icon:<ClipboardCheck size={24} className="text-blue-500" />},
+        { title: 'Failed Tests', value: data.failedTests || '0', icon: <AlertCircle size={24} className="text-red-500" />},
+        { title: 'Pending Tests', value: data.pendingTests || '0', icon: <Clock size={24} className="text-amber-500" />},
+        { title: 'Pass Rate', value: `${data.passRate}%` || '0%', icon: <Activity size={24} className="text-green-500" />},
+      ]);
+    } catch (error) {
+      console.error('Erro ao buscar estatísticas:', error);
+    }
+  };
+
+  fetchStats();
+  
+}, []);
+
 
   const recentActivity = [
     { id: 1, user: 'Luana Martins', action: 'Updated test case', test: 'User Authentication', time: '10 minutes ago', status: 'passed' },
@@ -52,7 +67,7 @@ const Dashboard: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-800">Welcome, {user?.name}</h2>
         <div className="flex items-center text-sm text-gray-600">
           <Calendar className="mr-1" size={16} />
-          {new Date().toLocaleDateString('en-US', { 
+          {new Date().toLocaleDateString('pt-br', { 
             weekday: 'long',
             year: 'numeric',
             month: 'long', 
@@ -69,7 +84,6 @@ const Dashboard: React.FC = () => {
             title={stat.title}
             value={stat.value}
             icon={stat.icon}
-            change={stat.change}
           />
         ))}
       </div>
